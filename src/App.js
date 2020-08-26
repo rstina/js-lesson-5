@@ -10,9 +10,7 @@ import MessageList from './components/MessageList';
 
 function App() {
   // useState returnerar en variabel och en funktion
-  // default value satt till 0, useState(0)
-  const [counter, setCounter] = useState(0)
-
+  // default value satt till useState({})
   // default värde objekt eftersom det är det som ska sparas. Förväntad typ som default helt enkelt
   const [chatRoomData, setChatRoomData] = useState({})
 
@@ -26,30 +24,29 @@ function App() {
       // ])
   // bra att använda för att hämta hem data, med tex fetch
 
+  function handleGetChatRoom() {
+      // 1 körs när komponenten initieras
+     console.log("1")
+     const url ="https://mock-data-api.firebaseio.com/chatrooms/-MFZumveIpHH5D_gkUHJ.json"
+     fetch(url)
+     .then( response => {
+       // gör om från json
+       console.log("2")
+       return response.json()
+       // returnerar ett promise som nästa then tar hand om
+     })
+     .then( data => {
+       console.log("4")
+       console.log(data)
+       setChatRoomData(data)
+     })
+     console.log("3")    
+  }
+
   useEffect(() => {
-     // 1 körs när komponenten initieras
-    console.log("1")
-    const url ="https://mock-data-api.firebaseio.com/chatrooms/-MFZumveIpHH5D_gkUHJ.json"
-    
-    fetch(url)
-    .then( response => {
-      // gör om från json
-      console.log("2")
-      return response.json()
-      // returnerar ett promise som nästa then tar hand om
-    })
-    .then( data => {
-      console.log("4")
-      console.log(data)
-      setChatRoomData(data)
-    })
-    console.log("3")
+     handleGetChatRoom()
   }, [])
 
-  function handleOnClick () {
-    setCounter(counter + 1)
-    console.log(counter)
-  }
 
   return (
     // JSX
@@ -57,7 +54,7 @@ function App() {
       <div className="container">
         {/* hämtade namnet från aktuella rummet */}
         {/* kopplade ett onClick */}
-        <h1 onClick={handleOnClick}>{chatRoomData.name} - {counter}</h1>
+        <h1>{chatRoomData.name}</h1>
 
         <div className="row">
           <div className="col-md-12">
@@ -66,6 +63,8 @@ function App() {
             men man skriver <MessageForm /> eftersom den returnerar JSX */}
             {/* prop "label" skickar med texten till label */}
             <MessageForm 
+              // skicka med funktion etc med props
+              success={handleGetChatRoom}
               label="Enter a message: " 
               placeholder="Message..." 
             />

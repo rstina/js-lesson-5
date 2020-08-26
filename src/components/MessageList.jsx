@@ -16,13 +16,15 @@ export default function MessageList({messages}) {
   return(
     <ul className="list-group">
       {
-        messageArray.map( item => {
+        messageArray.reverse().map( item => {
           // samma sak som nedan
           // return <MessageItem key={item[0]} message={item[1].message} />
 
           const key = item[0]
           const messageData = item[1]
           const message = messageData.message
+          // key, vill React att man ska ha på objekt som man ska rendera massor av
+          // key är ett inbyggt attribut
           return <MessageItem key={key} message={message} />
         })
       }
